@@ -1,0 +1,41 @@
+# Conversion to YAML from Properties formar report
+# Warnings:
+# - The yaml file had comments which are lost in the refactoring!
+spring:
+  autoconfigure:
+    exclude:
+    - org.springframework.cloud.gateway.server.mvc.GatewayServerMvcAutoConfiguration
+  main:
+    web-application-type: reactive
+  application:
+    name: APIGateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/users/**
+            - id: account-service
+              uri: http://localhost:8082
+              predicates:
+                 - Path=/api/accounts/**
+            - id: transaction-service
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/transactions/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          secret: M2pRb3lTSU1qNlFyQ0hkV3Brc0h0NmtFb3FoV3R5ZmM=
+server:
+  port: 8080
+eureka:
+  client:
+    service-url:
+      defaultZone: "http://localhost:8761/eureka/"
+    register-with-eureka: true
+    fetch-registry: true
